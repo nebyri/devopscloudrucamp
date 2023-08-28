@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app
+  name: helm-my-app
   namespace: nebyri
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: my-app
+      app: helm-my-app
   template:
     metadata:
       labels:
-        app: my-app
+        app: helm-my-app
     spec:
       containers:
-        - name: my-app-container
-          image: nebyri/devopscloudrucamp:latest
+        - name: helm-my-app-container
+          image: {{ .Values.imageName }}
           ports:
             - containerPort: 8000
               protocol: TCP
@@ -44,16 +44,18 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.uid
+            - name: AUTHOR
+              value: {{ .Values.authorName }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-app-service
+  name: my-helm-app-service
   namespace: nebyri
 spec:
   type: ClusterIP
   selector:
-    app: my-app
+    app: helm-my-app
   ports:
     - protocol: TCP
       port: 8080
