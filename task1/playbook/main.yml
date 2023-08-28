@@ -1,28 +1,29 @@
-name: Configure host
-hosts: all
-become: yes
+---
+- name: Configure host
+  hosts: all
+  become: yes
 
-tasks:
- - name: create new user
-     user:
-     name: cloudru
-     password: "{{ 'cloudpass' | password_hash('sha512') }}"
-     update_password: on_create
-     shell: /bin/bash
+  tasks:
+  - name: create new user
+    user:
+      name: cloudru
+      password: "{{ 'cloudpass' | password_hash('sha512') }}"
+      update_password: on_create
+      shell: /bin/bash
  
- -  name: copy ssh key for cloudru user
-    authorized_key:
-      user: cloudru
-      key: "{{ lookup('file', './public_key.pub') }}"
+  -  name: copy ssh key for cloudru user
+     authorized_key:
+       user: cloudru
+       key: "{{ lookup('file', './public_key.pub') }}"
 
- -  name: disable root login
+  - name: disable root login
     lineinfile:
       dest: /etc/ssh/sshd_config
       regexp: '^PermitRootLogin'
       line: 'PermitRootLogin no'
       state: present
 
- -  name: restart ssh service
+  - name: restart ssh service
     service:
       name: sshd
       state: restarted
