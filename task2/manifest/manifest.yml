@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app
+  name: webserver
   namespace: nebyri
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: my-app
+      app: webserver
   template:
     metadata:
       labels:
-        app: my-app
+        app: webserver
     spec:
       containers:
-        - name: my-app-container
+        - name: webserver-container
           image: nebyri/devopscloudrucamp:latest
           ports:
             - containerPort: 8000
@@ -48,12 +48,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-app-service
+  name: webserver-service
   namespace: nebyri
 spec:
   type: ClusterIP
   selector:
-    app: my-app
+    app: webserver
   ports:
     - protocol: TCP
       port: 8080

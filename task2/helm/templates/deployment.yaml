@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: helm-my-app
+  name: helm-webserver
   namespace: nebyri
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: helm-my-app
+      app: helm-webserver
   template:
     metadata:
       labels:
-        app: helm-my-app
+        app: helm-webserver
     spec:
       containers:
-        - name: helm-my-app-container
+        - name: helm-webserver-container
           image: {{ .Values.imageName }}
           ports:
             - containerPort: 8000
@@ -50,12 +50,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-helm-app-service
+  name: my-webserver-service
   namespace: nebyri
 spec:
   type: ClusterIP
   selector:
-    app: helm-my-app
+    app: helm-webserver
   ports:
     - protocol: TCP
       port: 8080
